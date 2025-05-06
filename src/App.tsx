@@ -13,8 +13,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const global_color_code = "rgb(135, 38, 87)";
-const global_color_code_hex = "#872657";
+// const global_color_code = "rgb(135, 38, 87)";
+// const global_color_code_hex = "#872657";
 
 type rowObject = {
   id: number;
@@ -38,8 +38,10 @@ let timeout: NodeJS.Timeout | null = null;
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [items, setItems] = useState<{ [key: string]: any }[]>([]);
   const [query, setQuery] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [qres, setQres] = useState<{ [key: string]: any }[]>([]);
   async function insertor(formData: FormData) {
     const name = formData.get("name");
@@ -70,6 +72,7 @@ function App() {
       WHERE name ILIKE '%${query}%'
       LIMIT 10;`;
       console.log(dbquery);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res = await db.query<{ [key: string]: any }>(dbquery);
       console.log("printing result array");
       console.log(res);
@@ -126,6 +129,7 @@ function App() {
       console.log(m);
     };
     creator();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -139,6 +143,7 @@ function App() {
         timeout = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return loading ? (
@@ -287,6 +292,7 @@ function TableComp({
   items,
 }: {
   items: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   }[];
 }) {
