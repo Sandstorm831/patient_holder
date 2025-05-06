@@ -1,4 +1,12 @@
 import { usePGlite, useLiveQuery } from "@electric-sql/pglite-react";
+import { useEffect, useState } from "react";
+import { PGliteWorker } from "@electric-sql/pglite/worker";
+import {
+  live,
+  type LiveNamespace,
+  type LiveQueryResults,
+} from "@electric-sql/pglite/live";
+import type { Results } from "@electric-sql/pglite";
 
 type rowObject = {
   id: number;
@@ -14,16 +22,70 @@ function isRowObjectType(item: { [key: string]: unknown }): item is rowObject {
   );
 }
 
+type dbworker = (PGliteWorker & { live: LiveNamespace }) | null;
+let db: dbworker = null;
+
 function App() {
-  const db = usePGlite();
-  const items = useLiveQuery(`SELECT * FROM people`);
-  console.log(typeof items);
-  console.log(items);
-  function insertor(formData: FormData) {
+  // let items: { [key: string]: any }[] = [];
+  const [items, setItems] = useState<{ [key: string]: any }[]>([]);
+  async function insertor(formData: FormData) {
     const name = formData.get("name");
-    db.query("INSERT INTO people (name) VALUES ($1)", [name]);
-    console.log(`${name} is inserted into the db`);
+    if (db) {
+      await db.query("INSERT INTO people (name) VALUES ($1)", [name]);
+      console.log(`${name} is inserted into the db`);
+    } else {
+      console.log("db is undefined");
+      console.log("printing the undefined items rows");
+      console.log(items);
+    }
   }
+
+  useEffect(() => {
+    //////// Creator function //////////////
+    async function creator() {
+      const pg = await PGliteWorker.create(worker, {
+        dataDir: "idb://my-db",
+        extensions: {
+          live,
+        },
+      });
+
+      console.log("Creating table...");
+
+      await pg.exec(`
+      CREATE TABLE IF NOT EXISTS people (
+          id SERIAL PRIMARY KEY,
+          name TEXT NOT NULL
+      );
+      `);
+      db = pg;
+      console.log("table creation done");
+      await pg.live.query(`SELECT * FROM people`, [], (res) => {
+        console.log("printing result");
+        console.log(res.rows);
+        const x = res.rows;
+        setItems(x);
+        console.log("printing item rows");
+        console.log(items);
+      });
+      console.log("are you coming here??");
+      db = pg;
+    }
+    /////////////////////////////////////////
+
+    const worker = new Worker(new URL("./pglite_worker.js", import.meta.url), {
+      type: "module",
+    });
+    worker.onerror = (e: ErrorEvent) => {
+      console.log("some worker error occured");
+      throw e;
+    };
+    worker.onmessage = (m: MessageEvent) => {
+      console.log("Some message recieved from worker");
+      console.log(m);
+    };
+    creator();
+  }, []);
 
   return (
     <>
@@ -35,8 +97,8 @@ function App() {
         </form>
       </div>
       <div className="flex flex-col grow-1">
-        {items
-          ? items.rows.map((item, id: number) => {
+        {items && items.length
+          ? items.map((item, id: number) => {
               if (isRowObjectType(item)) {
                 return <div key={id}>{item.name}</div>;
               } else {
