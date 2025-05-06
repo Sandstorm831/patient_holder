@@ -153,22 +153,22 @@ function App() {
         <TabsList className="w-full h-16">
           <TabsTrigger
             value="register_patient"
-            className={`w-1/2 text-3xl text-[rgb(135, 38, 87)] `}
+            className={`w-1/2 md:text-3xl text-[rgb(135, 38, 87)] font-mono`}
           >
             Register Patient
           </TabsTrigger>
           <TabsTrigger
             value="query_patient"
-            className={`w-1/2 text-3xl text-[rgb(135, 38, 87)] `}
+            className={`w-1/2 max-md:text-sm md:text-3xl text-[rgb(135, 38, 87)] font-mono`}
           >
             Find patient record
           </TabsTrigger>
         </TabsList>
         <TabsContent value="register_patient" className="w-full">
           <Dialog>
-            <div className="w-full flex justify-center h-12 my-5">
+            <div className="w-full flex justify-center max-md:h-16 md:h-12 my-5">
               <DialogTrigger
-                className={`w-2/5 flex flex-col justify-center text-3xl bg-[#872657] text-gray-200 rounded-lg shadow-sm hover:shadow-lg transition duration-200 hover:scale-101 cursor-pointer font-mono`}
+                className={`w-2/5 flex flex-col justify-center max-lg:text-md lg:text-3xl bg-[#872657] text-gray-200 rounded-lg shadow-sm hover:shadow-lg transition duration-200 hover:scale-101 cursor-pointer font-mono`}
               >
                 <div>Input patient details</div>
               </DialogTrigger>
@@ -263,58 +263,7 @@ function App() {
               </DialogHeader>
             </DialogContent>
           </Dialog>
-          <div className="flex justify-center w-full font-mono">
-            <div className="w-4/5 grid grid-cols-4 grid-auto-flow-row auto-rows-[50px] bg-[#872657] border rounded-lg">
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">
-                  PatientId
-                </div>
-              </div>
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">Name</div>
-              </div>
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">Age</div>
-              </div>
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">
-                  Gender
-                </div>
-              </div>
-              {items && items.length
-                ? items.map((item, id: number) => {
-                    if (isRowObjectType(item)) {
-                      return (
-                        <React.Fragment key={id}>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.id}
-                            </div>
-                          </div>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.name}
-                            </div>
-                          </div>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.age}
-                            </div>
-                          </div>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.gender}
-                            </div>
-                          </div>
-                        </React.Fragment>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })
-                : null}
-            </div>
-          </div>
+          <TableComp items={items} />
         </TabsContent>
         <TabsContent value="query_patient">
           {/* Insert for querying logic */}
@@ -324,79 +273,71 @@ function App() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Enter the name of patient"
               type="text"
-              className="h-16 w-4/5 px-8 py-2 text-2xl border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="max-lg:h-12 lg:h-16 w-4/5 px-8 lg:py-2 max-lg:text-md lg:text-2xl border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <div className="flex justify-center w-full font-mono">
-            <div className="w-4/5 grid grid-cols-4 grid-auto-flow-row auto-rows-[50px] bg-[#872657] border rounded-lg">
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">
-                  PatientId
-                </div>
-              </div>
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">Name</div>
-              </div>
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">Age</div>
-              </div>
-              <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] text-3xl flex justify-center w-full">
-                <div className="flex flex-col h-full justify-center">
-                  Gender
-                </div>
-              </div>
-              {qres && qres.length
-                ? qres.map((item, id: number) => {
-                    if (isRowObjectType(item)) {
-                      return (
-                        <React.Fragment key={id}>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.id}
-                            </div>
-                          </div>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.name}
-                            </div>
-                          </div>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.age}
-                            </div>
-                          </div>
-                          <div className="px-2 h-full bg-white text-black text-xl flex justify-center w-full font-mono">
-                            <div className="flex flex-col justify-center">
-                              {item.gender}
-                            </div>
-                          </div>
-                        </React.Fragment>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })
-                : null}
-            </div>
-          </div>
+          <TableComp items={qres} />
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
 
-      {/*  */}
-
-      {/*  */}
-
-      {/* <div className="flex flex-col grow-1">
+function TableComp({
+  items,
+}: {
+  items: {
+    [key: string]: any;
+  }[];
+}) {
+  return (
+    <div className="flex justify-center w-full font-mono">
+      <div className="w-4/5 grid grid-cols-4 grid-auto-flow-row auto-rows-[50px] bg-[#872657] border rounded-lg">
+        <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] max-lg:text-sm lg:text-3xl flex justify-center w-full">
+          <div className="flex flex-col h-full justify-center">PatientId</div>
+        </div>
+        <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] max-lg:text-sm lg:text-3xl flex justify-center w-full">
+          <div className="flex flex-col h-full justify-center">Name</div>
+        </div>
+        <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] max-lg:text-sm lg:text-3xl flex justify-center w-full">
+          <div className="flex flex-col h-full justify-center">Age</div>
+        </div>
+        <div className="border-[#872657] rounded-lg bg-[#872657] text-[#fffefc] max-lg:text-sm lg:text-3xl flex justify-center w-full">
+          <div className="flex flex-col h-full justify-center">Gender</div>
+        </div>
         {items && items.length
           ? items.map((item, id: number) => {
               if (isRowObjectType(item)) {
-                return <div key={id}>{item.name}</div>;
+                return (
+                  <React.Fragment key={id}>
+                    <div className="px-2 h-full bg-white text-black max-md:text-sm md:text-xl flex justify-center w-full font-mono">
+                      <div className="flex flex-col justify-center">
+                        {item.id}
+                      </div>
+                    </div>
+                    <div className="px-2 h-full bg-white text-black max-md:text-sm md:text-xl flex justify-center w-full font-mono">
+                      <div className="flex flex-col justify-center">
+                        {item.name}
+                      </div>
+                    </div>
+                    <div className="px-2 h-full bg-white text-black max-md:text-sm md:text-xl flex justify-center w-full font-mono">
+                      <div className="flex flex-col justify-center">
+                        {item.age}
+                      </div>
+                    </div>
+                    <div className="px-2 h-full bg-white text-black max-md:text-sm md:text-xl flex justify-center w-full font-mono">
+                      <div className="flex flex-col justify-center">
+                        {item.gender}
+                      </div>
+                    </div>
+                  </React.Fragment>
+                );
               } else {
                 return null;
               }
             })
           : null}
-      </div> */}
+      </div>
     </div>
   );
 }
