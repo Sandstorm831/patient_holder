@@ -47,17 +47,13 @@ function App() {
     const name = formData.get("name");
     const age = formData.get("age");
     const gender = formData.get("gender");
-    console.log(name, age, gender);
     if (db) {
       await db.query(
         "INSERT INTO patient (name, age, gender) VALUES ($1, $2, $3)",
         [name, age, gender]
       );
-      console.log(`${name} is inserted into the db`);
     } else {
       console.log("db is undefined");
-      console.log("printing the undefined items rows");
-      console.log(items);
     }
   }
 
@@ -71,11 +67,8 @@ function App() {
       FROM patient
       WHERE name ILIKE '%${query}%'
       LIMIT 10;`;
-      console.log(dbquery);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res = await db.query<{ [key: string]: any }>(dbquery);
-      console.log("printing result array");
-      console.log(res);
       setQres(res.rows);
     } else {
       console.log("db is not defined");
@@ -92,8 +85,6 @@ function App() {
         },
       });
 
-      console.log("Creating table...");
-
       await pg.exec(`
       CREATE TABLE IF NOT EXISTS patient (
           id SERIAL PRIMARY KEY,
@@ -103,16 +94,10 @@ function App() {
       );
       `);
       db = pg;
-      console.log("table creation done");
       await pg.live.query(`SELECT * FROM patient`, [], (res) => {
-        console.log("printing result");
-        console.log(res.rows);
         const x = res.rows;
         setItems(x);
-        console.log("printing item rows");
-        console.log(items);
       });
-      console.log("are you coming here??");
       setLoading(false);
     }
     /////////////////////////////////////////
@@ -124,12 +109,12 @@ function App() {
       console.log("some worker error occured");
       throw e;
     };
-    worker.onmessage = (m: MessageEvent) => {
-      console.log("Some message recieved from worker");
-      console.log(m);
-    };
+    // Uncomment to listen to worker and log the messages
+    // worker.onmessage = (m: MessageEvent) => {
+    //   console.log("Some message recieved from worker");
+    //   console.log(m);
+    // };
     creator();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -160,7 +145,7 @@ function App() {
             value="register_patient"
             className={`w-1/2 md:text-3xl text-[rgb(135, 38, 87)] font-mono`}
           >
-            Register Patient
+            Register patient
           </TabsTrigger>
           <TabsTrigger
             value="query_patient"
