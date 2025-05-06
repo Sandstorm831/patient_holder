@@ -1,12 +1,7 @@
-import { usePGlite, useLiveQuery } from "@electric-sql/pglite-react";
 import { useEffect, useState } from "react";
 import { PGliteWorker } from "@electric-sql/pglite/worker";
-import {
-  live,
-  type LiveNamespace,
-  type LiveQueryResults,
-} from "@electric-sql/pglite/live";
-import type { Results } from "@electric-sql/pglite";
+import { live, type LiveNamespace } from "@electric-sql/pglite/live";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type rowObject = {
   id: number;
@@ -107,6 +102,16 @@ function App() {
             })
           : null}
       </div>
+      <Tabs defaultValue="account" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="password">Password</TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">
+          Make changes to your account here.
+        </TabsContent>
+        <TabsContent value="password">Change your password here.</TabsContent>
+      </Tabs>
     </>
   );
 }
