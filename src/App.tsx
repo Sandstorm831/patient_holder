@@ -138,7 +138,7 @@ function App() {
       </div>
     </div>
   ) : (
-    <div className="h-full w-full p-5">
+    <div className="h-full w-full max-md:px-1 max-md:py-2 md:p-5">
       <Tabs defaultValue="register_patient" className="w-full">
         <TabsList className="w-full h-16">
           <TabsTrigger
@@ -163,9 +163,9 @@ function App() {
                 <div>Input patient details</div>
               </DialogTrigger>
             </div>
-            <DialogContent className="w-full m-5">
+            <DialogContent className="w-full md:m-5">
               <DialogHeader>
-                <DialogTitle className="w-full flex justify-center text-3xl text-[#872657]">
+                <DialogTitle className="w-full flex justify-center max-md:text-md md:text-3xl text-[#872657]">
                   Enter patient's data
                 </DialogTitle>
                 <DialogDescription>
@@ -187,7 +187,7 @@ function App() {
 
                     {/* My radio button component */}
                     <div className="flex flex-col space-y-2 my-4 ms-1 w-full">
-                      <label className="text-gray-700 font-medium w-96">
+                      <label className="text-gray-700 font-medium w-full flex">
                         Gender
                       </label>
 
